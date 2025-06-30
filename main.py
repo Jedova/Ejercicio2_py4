@@ -1,39 +1,21 @@
-from membresia import Membresia
-from membresia import Gratis, Basico, Familiar, SinConexion, Pro
+from membresia import crear_membresia
 
-def crear_membresia(correo, tarjeta, tipo):
-    if tipo == 0:
-        return Gratis(correo, tarjeta)
-    elif tipo == 1:
-        return Basico(correo, tarjeta)
-    elif tipo == 2:
-        return Familiar(correo, tarjeta)
-    elif tipo == 3:
-        return SinConexion(correo, tarjeta)
-    elif tipo == 4:
-        return Pro(correo, tarjeta)
-    else:
-        print("Opción inválida. Se asigna membresía Gratis por defecto.")
-        return Gratis(correo, tarjeta)
-
-# Se requiere
+# Se requiere para el ingreso inicial
 correo = input("Indica tu correo: ")
 tarjeta = input("Indica el número de tarjeta: ")
 tipo = int(input("Elige tipo de membresía (0-4): "))
 
 compra = crear_membresia(correo, tarjeta, tipo)
 
-print(f"\nCorreo: {compra.correo}")
-print(f"Tarjeta: {compra.tarjeta}")
-print(f"Tipo de membresía: {compra.__class__.__name__}")
+print("\nResumen de tu membresía actual:")
+compra.ver_info()
 
-##Ahora si buscamos ajustar membresía##
+##Ahora si buscamos ajustar/cambiar la membresía##
 
 cambio = input(f"¿deseas cambiar de tu membresía {compra.__class__.__name__}? SI/NO: ").strip().upper()
 
 if cambio == "SI":
     try:
-        
         tipo2 = int(input("Elige tipo de membresía, la cual debe ser distinta a la actual (0: Gratis; 1: Básico; 2:Familiar; 3: Sin Conexión; 4: Pro): "))
         
         ##Validar el tipo
@@ -42,7 +24,7 @@ if cambio == "SI":
         elif tipo2 == tipo:
             print (f"No puedes cambiar a la misma membresía. Se mantiene:  {compra.__class__.__name__} ")
         else:
-            compra = crear_membresia(compra.correo, compra.tarjeta, tipo2)
+            compra = compra.cambiar_suscripcion(tipo2)
             print(f"Tu nueva membresía es: {compra.__class__.__name__}")
     except ValueError:
         print("Entrada inválida. Debes ingresar un número entre 0 y 4.")
